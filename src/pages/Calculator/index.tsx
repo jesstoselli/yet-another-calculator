@@ -6,10 +6,8 @@ import { Container, Screen, Pad } from "./styles";
 const Calculator: React.FC = () => {
   const [currentValue, setCurrentValue] = useState<number>(0);
   const [prevValue, setPrevValue] = useState<number>(0);
-  const [currentOperand, setCurrentOperand] = useState<string>("");
-
+  const [operand, setOperand] = useState<string>("");
   const [valueToUse, setValueToUse] = useState<number[]>([]);
-
   const [operations, setOperations] = useState<string[]>([""]);
 
   const handleClick = useCallback(
@@ -27,61 +25,61 @@ const Calculator: React.FC = () => {
         btn !== "=" &&
         btn !== "C"
       ) {
-        value = Number(btn);
+        value = parseFloat(btn);
       }
 
-      if (value === Number(btn)) {
-        console.log(value);
+      if (value === parseFloat(btn)) {
         valueToUse.push(value);
-        setCurrentValue(Number(valueToUse.join("")));
-        console.log(valueToUse);
+        setCurrentValue(parseFloat(valueToUse.join("")));
         // } else if (btn === ".") {
-        //   if (!/\./.test(String(currentValue))) {
-        //     setCurrentValue(Number(String(currentValue) + "."));
-        //   }
+        //   valueToUse.push(0.0);
+        //   setCurrentValue(parseFloat(valueToUse.join("")));
       } else {
-        setCurrentOperand(btn);
-        let newSetOfOperations = [
-          ...operations,
-          currentOperand,
-          String(currentValue),
-        ];
-        setOperations(newSetOfOperations);
-
         switch (btn) {
           case "=":
-            console.log(btn);
             if (operations !== undefined) {
-              setCurrentValue(Number(operations.pop()));
+              let firstNum = operations[operations.length - 2];
+              let newSetOfOperations = [
+                ...operations,
+                currentValue.toString(),
+                "=",
+              ];
+              setOperations(newSetOfOperations);
+
+              let operationToExecute = `${firstNum} ${operand} ${currentValue}`;
+              setCurrentValue(parseFloat(eval(operationToExecute)));
+              setPrevValue(0);
+              setValueToUse([]);
             }
             break;
           case "%":
             let valueToPercentage = currentValue / 100;
-            setCurrentValue(valueToPercentage);
             setPrevValue(currentValue);
+            setCurrentValue(valueToPercentage);
             break;
           case "+":
             let valueToSum = prevValue + currentValue;
-            setPrevValue(currentValue);
+            setPrevValue(valueToSum);
             setCurrentValue(valueToSum);
-            // let newSetOfOperations = [...operations, String(currentValue)];
-            // setOperations(newSetOfOperations);
-
+            setOperand("+");
             break;
           case "-":
-            let valueToSubtract = prevValue + currentValue;
-            setPrevValue(currentValue);
+            let valueToSubtract = prevValue - currentValue;
+            setPrevValue(valueToSubtract);
             setCurrentValue(valueToSubtract);
+            setOperand("-");
             break;
           case "÷":
             let valueToDivide = prevValue / currentValue;
-            setPrevValue(currentValue);
+            setPrevValue(valueToDivide);
             setCurrentValue(valueToDivide);
+            setOperand("/");
             break;
           case "x":
             let valueToMultiply = prevValue * currentValue;
-            setPrevValue(currentValue);
+            setPrevValue(valueToMultiply);
             setCurrentValue(valueToMultiply);
+            setOperand("*");
             break;
           case "±":
             let negativeVal = currentValue * -1;
@@ -92,28 +90,29 @@ const Calculator: React.FC = () => {
             setCurrentValue(valueToPower);
             break;
           case "C":
-            setOperations([]);
-            setCurrentOperand("");
             setPrevValue(0);
             setCurrentValue(0);
+            setOperations([]);
+            setValueToUse([]);
             break;
 
           default:
             break;
         }
-        setValueToUse([]);
+        if (btn === "+" || btn === "-" || btn === "x" || btn === "÷") {
+          setValueToUse([]);
+          let newSetOfOperations = [
+            ...operations,
+            currentValue.toString(),
+            btn,
+          ];
+          setOperations(newSetOfOperations);
+        } else if (btn === "%" || btn === "x²" || btn === "±") {
+          setValueToUse([]);
+        }
       }
-      // setValueToUse([]);
-      // valueToUse = [];
-
-      // let newSetOfOperations = [
-      //   ...operations,
-      //   currentValue.toString(),
-      //   currentOperand,
-      // ];
-      // setOperations(newSetOfOperations);
     },
-    [currentOperand, currentValue, operations, prevValue, valueToUse]
+    [currentValue, operand, operations, prevValue, valueToUse]
   );
 
   const buttonContent = [
