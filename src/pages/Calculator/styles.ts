@@ -10,13 +10,12 @@ export const Container = styled.main`
   height: 32.5rem;
 `;
 
-// export const Content = styled.section``;
 export const Screen = styled.section`
   width: 100%;
   height: 7rem;
 
   margin-bottom: 2rem;
-  padding: 0 2rem;
+  padding: 2rem;
 
   background: #f9f9f9;
   color: #000000;
@@ -47,12 +46,14 @@ export const Screen = styled.section`
 
 export const Pad = styled.section`
   width: 100%;
-  height: 23.5rem;
+  /* height: 23.5rem; */
+  height: 30rem;
 
   display: grid;
   grid-template-columns: repeat(1fr);
   grid-template-rows: repeat(1fr);
   grid-template-areas:
+    "button button button button"
     "button button button button"
     "button button button button"
     "button button button button"

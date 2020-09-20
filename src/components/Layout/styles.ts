@@ -11,8 +11,6 @@ export const Container = styled.main`
   justify-content: center;
   align-items: center;
 
-  /* border: 1px solid black; */
-
   padding: 3rem 0;
 
   header {
@@ -21,8 +19,6 @@ export const Container = styled.main`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-
-    /* border: 1px solid black; */
 
     h1 {
       font-family: "Rubik";
@@ -45,7 +41,7 @@ export const Container = styled.main`
 
 export const Content = styled.section`
   width: 34rem;
-  height: 38.5rem;
+  height: 45rem;
 
   margin: 2rem 0;
 

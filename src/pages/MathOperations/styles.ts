@@ -7,7 +7,14 @@ export const Container = styled.main`
   align-items: center;
 
   width: 26.5rem;
-  height: 32.5rem;
+  height: 45rem;
+
+  h4 {
+    margin-bottom: 2rem;
+    font-family: "Rubik";
+    font-size: 2rem;
+    color: #fcdab7;
+  }
 
   hr {
     width: 26rem;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import DisabledInput from "../../components/DisabledInput";
 
-import primeNumbers from "../../helpers/primeNumbers";
+import getDivisorsCount from "../../helpers/getDivisorsCount.js";
 import factorial from "../../helpers/factorial";
 
 import { Container, Inputs, Results } from "./styles";
@@ -51,11 +51,11 @@ const MathOperations: React.FC = () => {
     },
     {
       label: "whole divisiors (A):",
-      value: primeNumbers(inputA),
+      value: getDivisorsCount(inputA),
     },
     {
       label: "whole divisiors (B):",
-      value: primeNumbers(inputB),
+      value: getDivisorsCount(inputB),
     },
     {
       label: "fatorial of A (A!):",
@@ -69,6 +69,7 @@ const MathOperations: React.FC = () => {
 
   return (
     <Container>
+      <h4>math operations</h4>
       <Inputs>
         <label>
           first num (A):
