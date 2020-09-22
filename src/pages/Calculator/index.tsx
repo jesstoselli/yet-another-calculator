@@ -38,14 +38,19 @@ const Calculator: React.FC = () => {
         switch (btn) {
           case "=":
             if (operations !== undefined) {
-              let firstNum = operations[operations.length - 2];
-              let newSetOfOperations = [
-                ...operations,
-                currentValue.toString(),
-                "=",
-              ];
-              setOperations(newSetOfOperations);
+              if (operations.join(" ").length >= 28) {
+                let ops = operations.slice(
+                  operations.length - 4,
+                  operations.length
+                );
+                setOperations([...ops, currentValue.toString(), btn]);
+              } else if (!isFinite(+operations[operations.length - 1])) {
+                setOperations([]);
+              } else {
+                setOperations([...operations, currentValue.toString(), "="]);
+              }
 
+              let firstNum = operations[operations.length - 2];
               let operationToExecute = `${firstNum} ${operand} ${currentValue}`;
               setCurrentValue(parseFloat(eval(operationToExecute)));
               setPrevValue(0);
@@ -59,26 +64,39 @@ const Calculator: React.FC = () => {
             break;
           case "+":
             let valueToSum = prevValue + currentValue;
-            setPrevValue(valueToSum);
+            if (!isFinite(valueToSum)) {
+              setCurrentValue(0);
+            }
             setCurrentValue(valueToSum);
+            setPrevValue(valueToSum);
             setOperand("+");
             break;
           case "-":
             let valueToSubtract = prevValue - currentValue;
-            setPrevValue(valueToSubtract);
+            if (!isFinite(valueToSubtract)) {
+              setCurrentValue(0);
+            }
             setCurrentValue(valueToSubtract);
+            setPrevValue(valueToSubtract);
             setOperand("-");
             break;
           case "÷":
             let valueToDivide = prevValue / currentValue;
-            setPrevValue(valueToDivide);
+            if (!isFinite(valueToDivide)) {
+              setCurrentValue(0);
+            }
             setCurrentValue(valueToDivide);
+            setPrevValue(valueToDivide);
             setOperand("/");
             break;
           case "x":
             let valueToMultiply = prevValue * currentValue;
-            setPrevValue(valueToMultiply);
+            if (!isFinite(valueToMultiply)) {
+              console.log("infnite");
+              // setCurrentValue(0);
+            }
             setCurrentValue(valueToMultiply);
+            setPrevValue(valueToMultiply);
             setOperand("*");
             break;
           case "±":
@@ -87,7 +105,11 @@ const Calculator: React.FC = () => {
             break;
           case "x²":
             let valueToPower = Math.pow(currentValue, 2);
-            setCurrentValue(valueToPower);
+            if (!isFinite(valueToPower)) {
+              setCurrentValue(0);
+            } else {
+              setCurrentValue(valueToPower);
+            }
             break;
           case "C":
             setPrevValue(0);
@@ -101,12 +123,22 @@ const Calculator: React.FC = () => {
         }
         if (btn === "+" || btn === "-" || btn === "x" || btn === "÷") {
           setValueToUse([]);
-          let newSetOfOperations = [
-            ...operations,
-            currentValue.toString(),
-            btn,
-          ];
-          setOperations(newSetOfOperations);
+          if (operations.join(" ").length >= 28) {
+            let ops = operations.slice(
+              operations.length - 4,
+              operations.length
+            );
+            setOperations([...ops, currentValue.toString(), btn]);
+          } else if (
+            isNaN(+operations[operations.length - 2]) &&
+            operations.length > 1
+          ) {
+            console.log(+operations[operations.length - 2]);
+            console.log(operations);
+            setOperations([]);
+          } else {
+            setOperations([...operations, currentValue.toString(), btn]);
+          }
         } else if (btn === "%" || btn === "x²" || btn === "±") {
           setValueToUse([]);
         }
